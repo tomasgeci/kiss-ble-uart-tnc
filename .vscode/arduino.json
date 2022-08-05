@@ -1,0 +1,6 @@
+{
+    "board": "esp32:esp32:tinypico",
+    "configuration": "UploadSpeed=921600,FlashMode=qio,FlashFreq=80,PSRAM=enabled,DebugLevel=none",
+    "sketch": "src/ble-bt-tnc.ino",
+    "port": "/dev/tty.usbserial-01C869E4"
+}
