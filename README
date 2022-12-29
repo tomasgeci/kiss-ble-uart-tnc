@@ -1,0 +1,35 @@
+# BLE to Bluetooth Classic adapter
+
+Older devices, like the TH-D74 radio only support Bluetooth Classic. iOS devices only support Bluetooth Low Energey (BLE). As such, you can't pair those devices together. This code provides a way to interface a device that exposes a serial profile over Bluetooth Classic, to an iOS device via BLE. Its main purpose is to use the TNC adapter built in the radio with a program that uses AX.25 packet like RadioMail or APRS.fi.
+
+## Hardware
+
+The code is based on the ESP32. Easiest is to use the excellent TinyPICO board https://www.tinypico.com
+
+Do not get any other models like the TinyS3 as the ESP32-S3 does not support bluetooth classic.
+
+## Software
+
+1. Install Aarduino IDE https://www.arduino.cc
+2. Install the ESP32 libraries
+3. Install the TinyPICO library (not strictly needed but used to activate the LED)
+4. Download this sketch
+5. If your radio has a different name, change the code to reflect it
+6. Flash sketch to TinyPICO
+
+## Pairing
+
+1. On TH-D74 go to Bluetooth -> Pairing Mode
+2. After a few seconds you should see a pin, press ok to accept.
+3. Once paired you should see a green LED on the TinyPICO
+4. Launch RadioMail. Go to Settings -> KISS TNC Modem -> Default TNC
+5. "TNC Blues" should appear in discovery screen
+6. Select TNC Blues, tap Done
+7. Go to connection screen and select a packet station
+8. When RadioMail connects to TNC Blues, blue LED should apprear on TinyPICO
+
+## Limitations
+
+- Code is just a proof of concept.
+- The adapter has to pair to the radio, hence it needs the bluetooth name of the radio. Having the radio pair to the adapter should be feasible but never worked.
+- Sometimes things get out of wack. Just restart the adapter.
