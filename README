@@ -6,13 +6,13 @@ Older devices, like the TH-D74 radio only support Bluetooth Classic. iOS devices
 
 The code is based on the ESP32. Easiest is to use the excellent TinyPICO board [https://www.tinypico.com](https://www.tinypico.com)
 
-Do not get any other models like the TinyS3 as the ESP32-S3 does not support bluetooth classic.
+**Do not get any other models like the TinyS3 as the ESP32-S3 does not support bluetooth classic.**
 
 ## Software
 
 1. Install Aarduino IDE [https://www.arduino.cc](https://www.arduino.cc)
-2. Install the ESP32 libraries
-3. Install the TinyPICO library (not strictly needed but used to activate the LED)
+2. Install the ESP32 libraries. Follow this guide [https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#installing-using-boards-manager](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#installing-using-boards-manager)
+3. Install the TinyPICO library (not strictly needed but used to activate the LED). The TinyPICO Arduino helper library is available from the library manager inside the Arduino IDE.
 4. Download this sketch
 5. If your radio has a different name, change the code to reflect it
 6. Flash sketch to TinyPICO
