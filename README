@@ -2,7 +2,7 @@
 
 Older devices, like the TH-D74 radio only support Bluetooth Classic. iOS devices only support Bluetooth Low Energey (BLE). As such, you can't pair those devices together. This code provides a way to interface a device that exposes a serial profile over Bluetooth Classic, to an iOS device via BLE. Its main purpose is to use the TNC adapter built in the radio with a program that uses AX.25 packet like RadioMail or APRS.fi.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/K-_nVApR7PU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+Watch a [video](https://www.youtube.com/watch?v=K-_nVApR7PU) of the adapter in action.
 
 ## Hardware
 
