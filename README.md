@@ -21,7 +21,7 @@ The code is compatible with the ESP32. Use ESP32 DevKit, Wroom or other boards w
 - Connect your TNC via 3.3V UART pins RX-GPIO16, TX-GPIO17 (with Arduino-like TNC use voltage divider to avoid problems with 5V non-tolerant inputs of ESP32)
 - Connect APRS.FI application via `Select TNC or software modem` choose `Aprs.fi TNC` in `BLE TNC discovered`
 
-## Licence
+## License
 
 - GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 
