@@ -1,16 +1,14 @@
-#include "BluetoothSerial.h"
+#include <HardwareSerial.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2902.h>
-#include <TinyPICO.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-#define RADIO_BLUETOOTH_NAME "TH-D74" // Change this to match your radio name
-#define ADAPTER_NAME "TNC Blues" // This is the name the adapter will be seen as
+#define ADAPTER_NAME "Aprs.fi TNC" // This is the name the adapter will be seen as
 
 /*
   More info about those magic numbers
@@ -22,30 +20,20 @@
 
 const size_t RX_BUF_SIZE = 256; // Max bytes for BLE is 20. BLE 4.2 supports up to 512. Should experiment with this.
 
-BluetoothSerial btSerial;
-TinyPICO tp = TinyPICO();
+HardwareSerial SerialPort(2); // UART2 - RX-GPIO16, TX-GPIO17
 
 BLECharacteristic *pTx;
 BLECharacteristic *pRx;
 bool bleDeviceConnected = false;
 
-void BTConfirmRequestCallback(uint32_t numVal)
+void startAdvertising()
 {
-  Serial.println("Pairing pin");
-  Serial.println(numVal);
-  btSerial.confirmReply(true);
-}
-
-void BTAuthCompleteCallback(boolean success)
-{
-  if (success)
-  {
-    Serial.println("Pairing success!!");
-  }
-  else
-  {
-    Serial.println("Pairing failed, rejected by user!!");
-  }
+  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->setScanResponse(true);
+  pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
+  //pAdvertising->setMinPreferred(0x12);
+  BLEDevice::startAdvertising();  
 }
 
 class MyServerCallbacks : public BLEServerCallbacks
@@ -54,13 +42,11 @@ class MyServerCallbacks : public BLEServerCallbacks
   {
     Serial.println("BLE device connected");
     bleDeviceConnected = true;
-    tp.DotStar_SetPixelColor(0, 0, 255);
   };
   void onDisconnect(BLEServer *pServer)
   {
     Serial.println("BLE device disconnected");
     bleDeviceConnected = false;
-    tp.DotStar_SetPixelColor(0, 255, 0);
     startAdvertising();
   }
 };
@@ -75,56 +61,26 @@ class MyCallbacks : public BLECharacteristicCallbacks
   // Data was written from the phone to the adapter
   void onWrite(BLECharacteristic *pCharacteristic)
   {
-    std::string txValue = pCharacteristic->getValue();
-    if (txValue.length() > 0)
+    std::string rxValue = pCharacteristic->getValue();
+    if (rxValue.length() > 0)
     {
-      // Received data on BLE, sending to TNC via BTC
-      btSerial.write(pCharacteristic->getData(), txValue.length());
-      // Does not seem necessary
-      //btSerial.flush();
+        Serial.println("Received Value from aprs.fi App: ");
+        for (int i = 0; i < rxValue.length(); i++){
+          Serial.print(rxValue[i]);
+        }
+        Serial.println("...");
+        Serial.println("Send received values via UART");
+        SerialPort.write(pCharacteristic->getData(), rxValue.length());
     }
   }
 };
 
 void setup()
 {
-  Serial.begin(115200);
-  tp.DotStar_Clear();
-  tp.DotStar_SetPixelColor(255, 0, 0);
-
-  /* 
-    BT Classic
-  */
-  btSerial.enableSSP();
-  btSerial.onConfirmRequest(BTConfirmRequestCallback);
-  btSerial.onAuthComplete(BTAuthCompleteCallback);
-
-  // Bluetooth classic adapter name
-  if (!btSerial.begin(ADAPTER_NAME, true))
-  {
-    Serial.println("BTC init failed.");
-    while(true)
-    {
-      delay(1000);
-    }
-  }
-  tp.DotStar_Clear();
-  Serial.println("The adapter started, now you can pair with BTC.");
-
-  // Connect to radio
-  if (btSerial.connect(RADIO_BLUETOOTH_NAME))
-  {
-    tp.DotStar_SetPixelColor(0, 255, 0);
-    Serial.println("BTC connected to radio");
-  }
-  else
-  {
-    waitForBTCConnect();
-  }
-  
-  /*
-   BLE
-  */
+  Serial.begin(115200); // debug
+  SerialPort.begin(9600, SERIAL_8N1, 16, 17); // UART TNC
+  delay(100);
+  Serial.println("Serial port init - UART2 - RX-GPIO16, TX-GPIO17");
 
   // BLE adapter name
   BLEDevice::init(ADAPTER_NAME);
@@ -155,54 +111,29 @@ void setup()
   startAdvertising();
 }
 
-void startAdvertising()
-{
-  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(SERVICE_UUID);
-  pAdvertising->setScanResponse(true);
-  pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
-  //pAdvertising->setMinPreferred(0x12);
-  BLEDevice::startAdvertising();  
-}
-
-void waitForBTCConnect()
-{
-  while (!btSerial.connected(10000))
-  {
-    Serial.println("Failed to connect to BTC device");
-    btSerial.connect();
-  }
-  tp.DotStar_SetPixelColor(0, 255, 0);
-  Serial.println("Bluetooth connected");
-}
-
 void loop()
 {
-  if (btSerial.connected())
-  {
     if (bleDeviceConnected)
     {
       uint8_t rxBuf[RX_BUF_SIZE];
       size_t rxLen = 0;
 
       // Data available from the TNC, send to BLE
-      while (btSerial.available() && rxLen < RX_BUF_SIZE)
+      while (SerialPort.available() && rxLen < RX_BUF_SIZE)
       {
-        rxBuf[rxLen++] = btSerial.read();
+        rxBuf[rxLen++] = SerialPort.read();
       }
 
       if (rxLen > 0)
       {
+        Serial.println("Send data received from TNC to aprr.fi App.");
         pRx->setValue(rxBuf, rxLen);
         pRx->notify();
       }
-    }
-  }
-  else
+    } else
   {
-    Serial.println("BTC device not connected");
-    tp.DotStar_Clear();
-    waitForBTCConnect();
+    Serial.println("BLE device not connected");
+    delay(1000); // wait
   }
   // Needed otherwise watchdog freaks out
   delay(10);
