@@ -2,8 +2,8 @@
 
 ## Credits
 
-- [https://bitbucket.org/islandmagic/ble-bt-tnc/src/master/ ](https://github.com/islandmagic/ble-bt-tnc)
-	- **Special thanks to Georges Auberger from Island Magic Co. for good inspiration**
+- https://github.com/islandmagic/ble-bt-tnc
+  - **Special thanks to Georges Auberger from Island Magic Co. for good inspiration**
 - https://github.com/nkolban/ESP32_BLE_Arduino
 - https://github.com/nkolban/esp32-snippets/issues/796
 - https://stackoverflow.com/questions/73781856/how-to-send-bluetooth-data-from-esp32-in-arduino
