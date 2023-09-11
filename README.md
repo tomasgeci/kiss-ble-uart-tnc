@@ -1,8 +1,8 @@
-# BLE to UART adapter for APRS.FI
+# BLE to UART adapter for APRS.FI iOS/iPadOS app
 
 ## Credits
 
-- https://bitbucket.org/islandmagic/ble-bt-tnc/src/master/ 
+- [https://bitbucket.org/islandmagic/ble-bt-tnc/src/master/ ](https://github.com/islandmagic/ble-bt-tnc)
 	- **Special thanks to Georges Auberger from Island Magic Co. for good inspiration**
 - https://github.com/nkolban/ESP32_BLE_Arduino
 - https://github.com/nkolban/esp32-snippets/issues/796
@@ -19,7 +19,7 @@ The code is compatible with the ESP32. Use ESP32 DevKit, Wroom or other boards w
 - Download this sketch
 - Flash sketch to ESP32 board
 - Connect your TNC via 3.3V UART pins RX-GPIO16, TX-GPIO17 (with Arduino-like TNC use voltage divider to avoid problems with 5V non-tolerant inputs of ESP32)
-- Connect APRS.FI application via `Select TNC or software modem` choose `Aprs.fi TNC` in `BLE TNC discovered`
+- Connect APRS.FI iOS/iPadOS app via `Select TNC or software modem` choose `Aprs.fi TNC` in `BLE TNC discovered`
 
 ## License
 
