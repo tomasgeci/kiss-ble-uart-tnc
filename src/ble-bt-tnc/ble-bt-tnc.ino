@@ -77,6 +77,9 @@ class MyCallbacks : public BLECharacteristicCallbacks
 
 void setup()
 {
+  // setup power saving
+  setCpuFrequencyMhz(10); // 10-20-40-80-160-240 MHz - needs testing for the best value
+
   Serial.begin(115200); // debug
   SerialPort.begin(9600, SERIAL_8N1, 16, 17); // UART TNC
   delay(100);
