@@ -8,6 +8,9 @@
 - https://github.com/nkolban/esp32-snippets/issues/796
 - https://stackoverflow.com/questions/73781856/how-to-send-bluetooth-data-from-esp32-in-arduino
 
+## Support
+- [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 ## Hardware
 
 The code is compatible with the ESP32. Use ESP32 DevKit, Wroom or other boards with native BLE support.
