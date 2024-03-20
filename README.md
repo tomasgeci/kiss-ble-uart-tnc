@@ -9,7 +9,7 @@
 - https://stackoverflow.com/questions/73781856/how-to-send-bluetooth-data-from-esp32-in-arduino
 
 ## Support
-- [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 ## Hardware
 
